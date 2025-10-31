@@ -1,0 +1,25 @@
+  - title: Outbound SMB Traffic to External IPs (445-139)
+    id: 8b9c0d1e-2f3a-4b5c-6d7e-8f9012345678
+    status: stable
+    description: Internal host connecting to external SMB services.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1021.002
+      - attack.lateral-movement
+    logsource:
+      category: firewall
+    detection:
+      selection:
+        dest_port:
+          - 445
+          - 139
+        direction: outgoing
+      condition: selection
+    fields:
+      - src_ip
+      - dest_ip
+    falsepositives:
+      - File sync tools
+      - Admin scripts
+    level: critical
