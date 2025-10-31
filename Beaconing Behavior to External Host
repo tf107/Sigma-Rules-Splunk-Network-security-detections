@@ -1,0 +1,28 @@
+  - title: Beaconing Behavior to External Host
+    id: 5e6f7a8b-9c0d-1e2f-3a4b-5c6d7e8f9012
+    status: experimental
+    description: Detects regular, high-variance outbound connections (C2 beaconing).
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1071
+      - attack.command-and-control
+    logsource:
+      category: proxy
+    detection:
+      selection:
+        direction: outgoing
+      aggregation: |
+        | bin _time span=1m
+        | stats count by src_ip, dest_ip, _time
+        | eventstats avg(count) as avg, stdev(count) as std by src_ip, dest_ip
+        | where count > (avg + 2*std) AND count > 3
+      condition: aggregation
+    fields:
+      - src_ip
+      - dest_ip
+      - count
+    falsepositives:
+      - Monitoring tools
+      - Backup agents
+    level: high
