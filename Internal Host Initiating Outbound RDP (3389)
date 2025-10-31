@@ -1,0 +1,22 @@
+  - title: Internal Host Initiating Outbound RDP (3389)
+    id: 4d5e6f7a-8b9c-0d1e-2f3a-4b5c6d7e8f90
+    status: stable
+    description: Internal host connecting to external RDP services.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1021
+      - attack.lateral-movement
+    logsource:
+      category: firewall
+    detection:
+      selection:
+        dest_port: 3389
+        direction: outgoing
+      condition: selection
+    fields:
+      - src_ip
+      - dest_ip
+    falsepositives:
+      - Remote support tools
+    level: high
