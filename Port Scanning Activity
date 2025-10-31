@@ -1,0 +1,25 @@
+  - title: Port Scanning Activity
+    id: 2b3c4d5e-6f7a-8b9c-0d1e-2f3a4b5c6d7e
+    status: stable
+    description: Source IP scanning >100 unique destination ports.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1595
+      - attack.reconnaissance
+    logsource:
+      category: firewall
+    detection:
+      selection:
+        action: denied
+      aggregation: |
+        | stats dc(dest_port) as unique_ports by src_ip
+        | where unique_ports > 100
+      condition: aggregation
+    fields:
+      - src_ip
+      - unique_ports
+    falsepositives:
+      - Vulnerability scanners
+      - Misconfigured services
+    level: medium
