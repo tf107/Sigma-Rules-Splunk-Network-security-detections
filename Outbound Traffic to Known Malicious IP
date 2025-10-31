@@ -1,0 +1,25 @@
+  - title: Outbound Traffic to Known Malicious IP
+    id: 8a9b1c2d-3e4f-5a6b-7c8d-9e0f1a2b3c4d
+    status: stable
+    description: Detects outbound connections to IPs in the malicious_ips lookup.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1071
+      - attack.command-and-control
+    logsource:
+      category: proxy
+      product: web
+    detection:
+      selection:
+        direction: outgoing
+        dest_ip:
+          - lookup: malicious_ips
+      condition: selection
+    fields:
+      - src_ip
+      - dest_ip
+      - url
+    falsepositives:
+      - Outdated threat intel
+    level: critical
