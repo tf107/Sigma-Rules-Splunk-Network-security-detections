@@ -1,0 +1,23 @@
+  - title: High Outbound Traffic After Business Hours
+    id: 7a8b9c0d-1e2f-3a4b-5c6d-7e8f90123456
+    status: stable
+    description: >100MB outbound from a host between 00:00–06:00.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1048
+      - attack.exfiltration
+    logsource:
+      category: firewall
+    detection:
+      selection:
+        hour: ['0', '1', '2', '3', '4', '5', '6']
+        bytes_out: '>100000000'
+      condition: selection
+    fields:
+      - src_ip
+      - total_out
+    falsepositives:
+      - Nightly backups
+      - Cloud sync
+    level: medium
