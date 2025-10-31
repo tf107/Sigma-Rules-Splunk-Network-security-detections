@@ -1,0 +1,25 @@
+ - title: Possible DNS Tunneling via Large Query Size
+    id: 1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+    status: experimental
+    description: Detects DNS queries with payload >10KB per domain.
+    author: SOC Team
+    date: 2025-11-01
+    tags:
+      - attack.t1048
+      - attack.exfiltration
+    logsource:
+      category: dns
+    detection:
+      selection:
+        query_length: '>10000'
+      aggregation: |
+        | stats sum(query_length) as total_bytes by src_ip, query
+        | where total_bytes > 10000
+      condition: aggregation
+    fields:
+      - src_ip
+      - query
+      - total_bytes
+    falsepositives:
+      - Legitimate large DNS (e.g., TXT records for SPF)
+    level: high
